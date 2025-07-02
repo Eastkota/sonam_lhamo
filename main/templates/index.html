@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Flask App with SQLite</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background-color: #ffffff; padding: 15px 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+        h1 { color: #333; margin: 0; font-size: 2em; }
+        .auth-links a, .auth-links button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            margin-left: 10px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+        }
+        .auth-links a:hover, .auth-links button:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+        .auth-links button.logout {
+            background-color: #dc3545;
+            box-shadow: 0 2px 6px rgba(220, 53, 69, 0.2);
+        }
+        .auth-links button.logout:hover {
+            background-color: #c82333;
+        }
+        .user-info { font-weight: 600; margin-right: 15px; color: #555; }
+        .flashes { list-style: none; padding: 0; margin-bottom: 20px; }
+        .flashes li { background-color: #d4edda; color: #155724; padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #c3e6cb; }
+        .flashes li.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; } /* For error messages */
+        h2 { color: #333; margin-top: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        ul { list-style: none; padding: 0; }
+        li { background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); margin-bottom: 15px; }
+        li strong { color: #007bff; font-size: 1.2em; display: block; margin-bottom: 5px; }
+        li p { margin-top: 10px; line-height: 1.6; color: #666; }
+        li small { color: #999; font-size: 0.85em; display: block; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Welcome to Student Record Dashboard!</h1>
+        <div class="auth-links">
+            {% if g.user %}
+                <span class="user-info">Logged in as {{ g.user['username'] }}</span>
+                <form action="{{ url_for('logout') }}" method="post" style="display:inline;">
+                    <button type="submit" class="logout">Log Out</button>
+                </form>
+            {% else %}
+                <a href="{{ url_for('register') }}">Register</a>
+                <a href="{{ url_for('login') }}">Log In</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <h2>Latest Records:</h2>
+    {% if posts %}
+        <ul>
+            {% for post in posts %}
+                <li>
+                    <strong>{{ post.title }}</strong>
+                    <small>by {{ post.username }} ({{ post.created.strftime('%Y-%m-%d %H:%M') }})</small><br>
+                    <p>{{ post.content }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Your Records will be shown here with graphs and table.</p>
+    {% endif %}
+</body>
+</html>
