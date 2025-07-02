@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Flask App with SQLite</title>
+    <title>Student Record Dashboard</title>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background-color: #ffffff; padding: 15px 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
@@ -36,11 +36,56 @@
         .flashes li { background-color: #d4edda; color: #155724; padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #c3e6cb; }
         .flashes li.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; } /* For error messages */
         h2 { color: #333; margin-top: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        ul { list-style: none; padding: 0; }
-        li { background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); margin-bottom: 15px; }
-        li strong { color: #007bff; font-size: 1.2em; display: block; margin-bottom: 5px; }
-        li p { margin-top: 10px; line-height: 1.6; color: #666; }
-        li small { color: #999; font-size: 0.85em; display: block; margin-top: 5px; }
+
+        /* Table specific styles */
+        .topics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden; /* Ensures rounded corners apply to table */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .topics-table th, .topics-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .topics-table th {
+            background-color: #f0f0f0;
+            font-weight: 700;
+            color: #555;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        .topics-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .topics-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        .add-button-container {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .add-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+        }
+        .add-button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -69,19 +114,36 @@
         {% endif %}
     {% endwith %}
 
-    <h2>Latest Records:</h2>
-    {% if posts %}
-        <ul>
-            {% for post in posts %}
-                <li>
-                    <strong>{{ post.title }}</strong>
-                    <small>by {{ post.username }} ({{ post.created.strftime('%Y-%m-%d %H:%M') }})</small><br>
-                    <p>{{ post.content }}</p>
-                </li>
-            {% endfor %}
-        </ul>
+    <div class="add-button-container">
+        <a href="{{ url_for('add_topic') }}" class="add-button">Add New Topic</a>
+    </div>
+
+    <h2>My Topics:</h2>
+    {% if topics %}
+        <table class="topics-table">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Topics Content</th>
+                    <th>Time Spent</th>
+                    <th>Created</th>
+                    <th>Author</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for topic in topics %}
+                <tr>
+                    <td>{{ topic.subject }}</td>
+                    <td>{{ topic.topics }}</td>
+                    <td>{{ topic.time_spent }}</td>
+                    <td>{{ topic.created.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ topic.username }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
-        <p>Your Records will be shown here with graphs and table.</p>
+        <p>No topics yet. Click "Add New Topic" to add your first record!</p>
     {% endif %}
 </body>
 </html>
