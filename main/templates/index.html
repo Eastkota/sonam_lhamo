@@ -46,6 +46,7 @@
             border-radius: 10px;
             overflow: hidden; /* Ensures rounded corners apply to table */
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px; /* Space below table */
         }
         .topics-table th, .topics-table td {
             padding: 12px 15px;
@@ -86,6 +87,21 @@
             background-color: #218838;
             transform: translateY(-2px);
         }
+        /* Plot specific styles */
+        .plot-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            margin-top: 30px;
+        }
+        .plot-container img {
+            max-width: 100%;
+            height: auto;
+            display: block; /* Remove extra space below image */
+            margin: 0 auto; /* Center image */
+        }
     </style>
 </head>
 <body>
@@ -125,7 +141,7 @@
                 <tr>
                     <th>Subject</th>
                     <th>Topics Content</th>
-                    <th>Time Spent</th>
+                    <th>Time Spent (Minutes)</th>
                     <th>Created</th>
                     <th>Author</th>
                 </tr>
@@ -144,6 +160,15 @@
         </table>
     {% else %}
         <p>No topics yet. Click "Add New Topic" to add your first record!</p>
+    {% endif %}
+
+    <h2>Topic Hours Summary:</h2>
+    {% if plot_url %}
+        <div class="plot-container">
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Topic Hours Plot">
+        </div>
+    {% else %}
+        <p>Add some topics with time spent to see a graph here!</p>
     {% endif %}
 </body>
 </html>
